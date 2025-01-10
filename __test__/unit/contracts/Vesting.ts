@@ -1,6 +1,6 @@
-import { Address, BinaryReader, BinaryWriter } from '@btc-vision/transaction';
+import { ABIDataTypes, Address, BinaryReader, BinaryWriter } from '@btc-vision/transaction';
 import { BytecodeManager, ContractDetails, ContractRuntime } from '@btc-vision/unit-test-framework';
-import { encodeNumericSelector } from './utils.js';
+import { encodeNumericSelector, encodeSelectorWithParams } from './utils.js';
 
 export type VestingInfo = {
   beneficiary: Address;
@@ -15,7 +15,7 @@ export type VestingInfo = {
  * This is a contract "interface" used to interact with the contract wasm bytecode in unit tests.
  */
 export class Vesting extends ContractRuntime {
-  protected readonly initialiseSelector = encodeNumericSelector('initialise');
+  protected readonly initialiseSelector = encodeSelectorWithParams('initialise', ABIDataTypes.ADDRESS, ABIDataTypes.ADDRESS, ABIDataTypes.UINT256, ABIDataTypes.UINT256);
   protected readonly claimSelector = encodeNumericSelector('claim');
   protected readonly unlockedAmountSelector = encodeNumericSelector('unlockedAmount');
   protected readonly cancelSelector = encodeNumericSelector('cancel');

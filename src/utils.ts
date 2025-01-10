@@ -18,3 +18,9 @@ export function getNextStoredString(defaultValue: string = ''): StoredString {
 export function getNextStoredAddress(defaultValue: Address = new Address()): StoredAddress {
   return new StoredAddress(Blockchain.nextPointer, defaultValue);
 }
+
+/*
+// FIXME: Ideally, this is how I would want selectors to be defined, this isn't possible at the moment
+export const getSelectorStringWithParams = (name: string, ...params: ABIDataTypes[]) =>
+  `${name}(${params.map((t) => AbiTypeToStr[t]).join(',')})`
+*/

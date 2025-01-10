@@ -203,7 +203,9 @@ export class Vesting extends OP_NET {
    */
   public execute(method: Selector, calldata: Calldata): BytesWriter {
     switch (method) {
-      case encodeSelector('initialise'): {
+      // Contract calls that requuire parameters must encode their selector a bit differently
+      // FIXME: Ideally this should be done by a helper function and the type names should come from an opnet package, but this isn't currently possible
+      case encodeSelector('initialise(address,address,uint256,uint256)'): {
         const beneficiary = calldata.readAddress();
         const vestingTokenAddress = calldata.readAddress();
         const vestingAmount = calldata.readU256();
