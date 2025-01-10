@@ -22,15 +22,15 @@ export class OP20Utils extends ImportedOP20Utils {
     return encodeSelector('totalSupply');
   }
   public static get APPROVE_SELECTOR(): Selector {
-    return encodeSelector('approve');
+    return encodeSelector('approve(address,uint256)');
   }
 
   public static get TRANSFER_FROM_SELECTOR(): Selector {
-    return encodeSelector('transferFrom');
+    return encodeSelector('transferFrom(address,address,uint256)');
   }
 
   public static get TRANSFER_SELECTOR(): Selector {
-    return encodeSelector('transfer');
+    return encodeSelector('transfer(address,uint256)');
   }
 
   public static totalSupply(token: Address): u256 {
