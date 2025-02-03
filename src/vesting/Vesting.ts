@@ -24,9 +24,9 @@ export class Vesting extends OP_NET {
   private vestingStartBlock: StoredU256;
   // Two different ways of defining immutable constants
   // Set directly
-  private SCALING_FACTOR: u256 = u256.from(10e18);
+  // private readonly SCALING_FACTOR: u256 = u256.from(10e18);
   // Set in constructor
-  private reclaimWindow: u256;
+  private readonly reclaimWindow: u256;
 
   /**
    * This constructor runs **EVERY TIME** your contract is called!
