@@ -30,7 +30,7 @@
     "@btc-vision/bitcoin": "6.3.6",
     "@btc-vision/btc-runtime": "1.4.7",
     "@btc-vision/op-vm": "0.2.7",
-    "@btc-vision/transaction": "1.2.10",
+    "@btc-vision/transaction": "1.2.13",
     "@btc-vision/unit-test-framework": "0.0.18",
     "@eslint/js": "^9.10.0",
     "dotenv": "^16.4.7",
