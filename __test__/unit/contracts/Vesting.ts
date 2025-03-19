@@ -15,7 +15,13 @@ export type VestingInfo = {
  * This is a contract "interface" used to interact with the contract wasm bytecode in unit tests.
  */
 export class Vesting extends ContractRuntime {
-  protected readonly initialiseSelector = encodeSelectorWithParams('initialise', ABIDataTypes.ADDRESS, ABIDataTypes.ADDRESS, ABIDataTypes.UINT256, ABIDataTypes.UINT256);
+  protected readonly initialiseSelector = encodeSelectorWithParams(
+    'initialise',
+    ABIDataTypes.ADDRESS,
+    ABIDataTypes.ADDRESS,
+    ABIDataTypes.UINT256,
+    ABIDataTypes.UINT256,
+  );
   protected readonly claimSelector = encodeNumericSelector('claim');
   protected readonly unlockedAmountSelector = encodeNumericSelector('unlockedAmount');
   protected readonly cancelSelector = encodeNumericSelector('cancel');
@@ -36,16 +42,14 @@ export class Vesting extends ContractRuntime {
     buf: Uint8Array,
     sender?: Address,
     origin?: Address,
-  ): Promise<Uint8Array> {
+  ): Promise<BinaryReader> {
     const result = await this.execute(Buffer.from(buf), sender, origin);
 
-    const response = result.response;
-    if (response == null) {
-      const errorMessage = result.error ? result.error.message : 'Unknown error occured';
-      throw new Error(errorMessage);
+    if (result.error) {
+      throw result.error;
     }
 
-    return response;
+    return new BinaryReader(result.response);
   }
 
   public async initialise(
@@ -62,9 +66,8 @@ export class Vesting extends ContractRuntime {
     calldata.writeU256(vestingAmount);
     calldata.writeU256(vestingDeadline);
 
-    const response = await this.getResponse(calldata.getBuffer());
+    const reader = await this.getResponse(calldata.getBuffer());
 
-    const reader = new BinaryReader(response);
     const success = reader.readBoolean();
     if (!success) {
       throw new Error('Vesting initialisation failed.');
@@ -75,9 +78,8 @@ export class Vesting extends ContractRuntime {
     const calldata = new BinaryWriter();
     calldata.writeSelector(this.claimSelector);
 
-    const response = await this.getResponse(calldata.getBuffer());
+    const reader = await this.getResponse(calldata.getBuffer());
 
-    const reader = new BinaryReader(response);
     const claimedAmount = reader.readU256();
 
     return claimedAmount;
@@ -87,9 +89,8 @@ export class Vesting extends ContractRuntime {
     const calldata = new BinaryWriter();
     calldata.writeSelector(this.unlockedAmountSelector);
 
-    const response = await this.getResponse(calldata.getBuffer());
+    const reader = await this.getResponse(calldata.getBuffer());
 
-    const reader = new BinaryReader(response);
     const unlockedAmount = reader.readU256();
 
     return unlockedAmount;
@@ -99,9 +100,8 @@ export class Vesting extends ContractRuntime {
     const calldata = new BinaryWriter();
     calldata.writeSelector(this.cancelSelector);
 
-    const response = await this.getResponse(calldata.getBuffer());
+    const reader = await this.getResponse(calldata.getBuffer());
 
-    const reader = new BinaryReader(response);
     const success = reader.readBoolean();
     if (!success) {
       throw new Error('Vesting initialisation failed.');
@@ -112,9 +112,7 @@ export class Vesting extends ContractRuntime {
     const calldata = new BinaryWriter();
     calldata.writeSelector(this.vestingInfoSelector);
 
-    const response = await this.getResponse(calldata.getBuffer());
-
-    const reader = new BinaryReader(response);
+    const reader = await this.getResponse(calldata.getBuffer());
 
     const vestingInfo: VestingInfo = {
       beneficiary: reader.readAddress(),
@@ -128,10 +126,21 @@ export class Vesting extends ContractRuntime {
     return vestingInfo;
   }
 
+  public override async init(): Promise<void> {
+    this.defineRequiredBytecodes();
+
+    this._bytecode = BytecodeManager.getBytecode(this.address) as Buffer;
+    return await Promise.resolve();
+  }
+
   /**
    * This function defines which wasm file gets loaded and executed against.
    */
   protected defineRequiredBytecodes(): void {
     BytecodeManager.loadBytecode(`./build/Vesting.wasm`, this.address);
+  }
+
+  protected handleError(error: Error): Error {
+    return new Error(`(in vesting: ${this.address}) OPNET: ${error.stack}`);
   }
 }

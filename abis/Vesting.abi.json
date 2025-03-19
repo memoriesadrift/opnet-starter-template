@@ -1,0 +1,97 @@
+{
+    "functions": [
+        {
+            "name": "initialise",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "beneficiary",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "vestingTokenAddress",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "vestingAmount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "vestingDeadline",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "success",
+                    "type": "BOOL"
+                }
+            ]
+        },
+        {
+            "name": "claim",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "claimedAmount",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "unlockedAmount",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "unlockedAmount",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "cancel",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "success",
+                    "type": "BOOL"
+                }
+            ]
+        },
+        {
+            "name": "vestingInfo",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "beneficiary",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "vestedTokenAddress",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "vestedAmount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "remainingAmount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "vestingStartBlock",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "deadlineBlock",
+                    "type": "UINT256"
+                }
+            ]
+        }
+    ],
+    "events": []
+}
