@@ -1,8 +1,7 @@
 {
   "targets": {
-    "Vesting": {
-      "outFile": "build/Vesting.wasm",
-      "outFile": "build/Vesting.wat",
+    "build/vesting.wasm": {
+      "outFile": "build/vesting.wasm",
       "use": [
         "abort=src/vesting/index/abort"
       ]
@@ -14,7 +13,7 @@
     "optimizeLevel": 3,
     "shrinkLevel": 2,
     "converge": true,
-    "noAssert": true,
+    "noAssert": false,
     "disable": [
       "mutable-globals",
       "sign-extension",

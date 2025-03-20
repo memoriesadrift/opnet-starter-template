@@ -72,7 +72,6 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     Assert.expect(vestingInfo.remainingAmount).toEqual(vestingAmount);
   });
 
-  /*
   await vm.it("Doesn't allow non-beneficiary to claim rewards", async () => {
     const beneficiary = rnd();
     const vestingAmount = 10000n;
@@ -189,5 +188,4 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
       Assert.expect(claimedAmount).toEqual(vestingAmount);
     },
   );
-  */
 });

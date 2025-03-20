@@ -137,7 +137,7 @@ export class Vesting extends ContractRuntime {
    * This function defines which wasm file gets loaded and executed against.
    */
   protected defineRequiredBytecodes(): void {
-    BytecodeManager.loadBytecode(`./build/Vesting.wasm`, this.address);
+    BytecodeManager.loadBytecode(`./build/vesting.wasm`, this.address);
   }
 
   protected handleError(error: Error): Error {

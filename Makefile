@@ -13,7 +13,9 @@ TEST_FILES = $(shell find $(TEST_SRC_DIR) -type f -name '*.ts')
 ASC = npx asc
 
 ASC_OPTS = \
-	--config asconfig.json
+	--config asconfig.json \
+	--measure\
+	--uncheckedBehavior never\
 
 .PHONY: all
 all: compile
@@ -44,7 +46,7 @@ $(OUTPUT_WASM_FILES): $(SOURCE_FILES)
 			target="$(BUILD_DIR)/$$(basename $$(dirname $$prereq)).wasm"; \
 			echo "Compiling $$prereq to $$target"; \
 			$(ASC) $$prereq \
-				-o $$target \
+				--target $$target \
 				--textFile $(BUILD_DIR)/$$(basename $$target).wat \
 				$(ASC_OPTS); \
 		fi; \
