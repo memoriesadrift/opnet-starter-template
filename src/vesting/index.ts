@@ -1,6 +1,6 @@
 import { Blockchain } from '@btc-vision/btc-runtime/runtime';
-import { Vesting } from './Vesting';
 import { revertOnError } from '@btc-vision/btc-runtime/runtime/abort/abort';
+import { Vesting } from './Vesting';
 
 // DO NOT TOUCH TO THIS.
 Blockchain.contract = () => {

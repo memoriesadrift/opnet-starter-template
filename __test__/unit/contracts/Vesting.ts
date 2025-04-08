@@ -49,6 +49,10 @@ export class Vesting extends ContractRuntime {
       throw result.error;
     }
 
+    // FIXME: ???
+    // Maybe this is necessary ???
+    //this.dispose();
+
     return new BinaryReader(result.response);
   }
 

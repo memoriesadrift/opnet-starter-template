@@ -1,12 +1,4 @@
 {
-  "targets": {
-    "build/vesting.wasm": {
-      "outFile": "build/vesting.wasm",
-      "use": [
-        "abort=src/vesting/index/abort"
-      ]
-    }
-  },
   "options": {
     "transform": "@btc-vision/opnet-transform",
     "sourceMap": false,

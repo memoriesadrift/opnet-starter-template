@@ -1,9 +1,8 @@
 import { Assert, Blockchain, OP_20, opnet, OPNetUnit } from '@btc-vision/unit-test-framework';
 import { Vesting } from '../contracts/Vesting';
 import { Address } from '@btc-vision/transaction';
-import { rnd } from '../contracts/configs';
 
-const deployer: Address = rnd();
+const deployer: Address = Blockchain.generateRandomAddress();
 
 await opnet('Vesting', async (vm: OPNetUnit) => {
   Blockchain.msgSender = deployer;
@@ -11,8 +10,8 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
 
   let token: OP_20;
   let vesting: Vesting;
-  const tokenAddress: Address = rnd();
-  const vestingAddress: Address = rnd();
+  const tokenAddress: Address = Blockchain.generateRandomAddress();
+  const vestingAddress: Address = Blockchain.generateRandomAddress();
 
   vm.beforeEach(async () => {
     // Reset blockchain state
@@ -51,11 +50,14 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     // Clear blockchain state between tests
     vesting.dispose();
     token.dispose();
+    Blockchain.cleanup();
     Blockchain.dispose();
   });
 
+  vm.afterAll(() => Blockchain.dispose());
+
   await vm.it('Initialises vesting contract successfully', async () => {
-    const beneficiary = rnd();
+    const beneficiary = Blockchain.generateRandomAddress();
     const vestingAmount = 10000n;
     const deadlineBlock = 100n;
     Blockchain.blockNumber = 1n;
@@ -73,7 +75,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
   });
 
   await vm.it("Doesn't allow non-beneficiary to claim rewards", async () => {
-    const beneficiary = rnd();
+    const beneficiary = Blockchain.generateRandomAddress();
     const vestingAmount = 10000n;
     const deadlineBlock = 100n;
     Blockchain.blockNumber = 1n;
@@ -81,14 +83,14 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     await token.approve(deployer, vestingAddress, vestingAmount);
     await vesting.initialise(beneficiary, tokenAddress, vestingAmount, deadlineBlock);
     Blockchain.blockNumber = 100n;
-    Blockchain.msgSender = rnd();
+    Blockchain.msgSender = Blockchain.generateRandomAddress();
     Assert.throwsAsync(async () => {
       await vesting.claim();
     });
   });
 
   await vm.it("Doesn't allow owner to cancel partially claimed vesting", async () => {
-    const beneficiary = rnd();
+    const beneficiary = Blockchain.generateRandomAddress();
     const vestingAmount = 10000n;
     const deadlineBlock = 100n;
     Blockchain.blockNumber = 1n;
@@ -106,7 +108,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
   });
 
   await vm.it('Allows owner to cancel unclaimed vesting', async () => {
-    const beneficiary = rnd();
+    const beneficiary = Blockchain.generateRandomAddress();
     const vestingAmount = 10000n;
     const deadlineBlock = 100n;
     const preBalance = await token.balanceOf(deployer);
@@ -122,7 +124,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
   });
 
   await vm.it('Calculates payout correctly after time elapses', async () => {
-    const beneficiary = rnd();
+    const beneficiary = Blockchain.generateRandomAddress();
     const vestingAmount = 10000n;
     const deadlineBlock = 100n;
     Blockchain.blockNumber = 1n;
@@ -138,7 +140,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
   });
 
   await vm.it('Unlocks correct amount of tokens per block, simple case', async () => {
-    const beneficiary = rnd();
+    const beneficiary = Blockchain.generateRandomAddress();
     const vestingAmount = 10000n;
     const deadlineBlock = 101n;
     const startBlock = 1n;
@@ -162,7 +164,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     'Unlocks correct amount of tokens per block, advanced case - random values',
     async () => {
       const BLOCKS_PER_DAY = 144;
-      const beneficiary = rnd();
+      const beneficiary = Blockchain.generateRandomAddress();
       const vestingAmount = Blockchain.expandTo18Decimals(Math.floor(Math.random() * 100000) + 1);
       const deadlineBlock = 1n + BigInt(Math.floor(Math.random() * BLOCKS_PER_DAY * 10) + 1);
       const startBlock = 1n;
