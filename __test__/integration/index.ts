@@ -8,7 +8,8 @@ import {
   TransactionParameters,
 } from 'opnet';
 import { Address, Wallet } from '@btc-vision/transaction';
-import { IVestingContract, VestingContractABI } from './interfaces/VestingInterfaces';
+import type { IVesting } from '../../abis/Vesting.d.ts';
+import VestingContractABI from '../../abis/Vesting.abi.json';
 
 dotenv.config({ path: '.env' });
 
@@ -27,12 +28,12 @@ const balance = await provider.getBalance(address);
 if (balance < 1000n) {
   throw new Error(`Balance too low (${balance}) - please fund ${address} on opnet regtest faucet`);
 }
-console.log('Wallet balance:', balance);
+console.log(`Wallet balance ${balance} sats`);
 
 const myAddress: Address = new Address(wallet.keypair.publicKey);
 
 const vestingContractAddress = await provider.getPublicKeyInfo(
-  process.env.VESTING_CONTRACT_ADDRESS || '',
+  'bcrt1pcp5z4kj3uu3we35ne472m23f2lk96s3cuwrfqkc75y2k9zyhk87sghurs3',
 );
 
 const tokenAddress = await provider.getPublicKeyInfo(process.env.TOKEN_CONTRACT_ADDRESS || '');
@@ -45,16 +46,20 @@ async function interact() {
     network,
     myAddress,
   );
-  const vestingContract: IVestingContract = getContract<IVestingContract>(
+  const vestingContract: IVesting = getContract<IVesting>(
     vestingContractAddress,
+    // FIXME: Not sure why these types don't overlap, probably a thing for OPNET to fix upstream
     VestingContractABI,
     provider,
     network,
     myAddress,
   );
 
-  const balanceCall = await tokenContract.balanceOf(wallet.address);
-  console.log('balance: ', balanceCall.properties.balance);
+  const beneficiary = await provider.getPublicKeyInfo(
+    'bcrt1pkrrp4crqdcz3ghyjfrgqsfwula6vuuxze67x4qh49eulu4lekdmsupnudx',
+  );
+  const vestingAmount = 1000000n;
+  const vestingDeadline = 2877n;
 
   // Change to whatever method is necessary
   const call = await vestingContract.claim();

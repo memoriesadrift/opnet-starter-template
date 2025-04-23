@@ -4,13 +4,12 @@ import {
   Blockchain,
   BytesWriter,
   Calldata,
-  encodeSelector,
   OP_NET,
   Revert,
   SafeMath,
-  Selector,
   StoredAddress,
   StoredU256,
+  U256_BYTE_LENGTH,
 } from '@btc-vision/btc-runtime/runtime';
 import { getNextStoredAddress, getNextStoredU256 } from '../utils';
 import { u256 } from '@btc-vision/as-bignum/assembly';
@@ -82,10 +81,42 @@ export class Vesting extends OP_NET {
     }
   }
 
+  @method(
+    {
+      name: 'beneficiary',
+      type: ABIDataTypes.ADDRESS,
+    },
+    {
+      name: 'vestingTokenAddress',
+      type: ABIDataTypes.ADDRESS,
+    },
+    {
+      name: 'vestingAmount',
+      type: ABIDataTypes.UINT256,
+    },
+    {
+      name: 'vestingDeadline',
+      type: ABIDataTypes.UINT256,
+    },
+  )
+  @returns({ name: 'success', type: ABIDataTypes.BOOL })
+  public initialise(calldata: Calldata): BytesWriter {
+    const beneficiary = calldata.readAddress();
+    const vestingTokenAddress = calldata.readAddress();
+    const vestingAmount = calldata.readU256();
+    const vestingDeadline = calldata.readU256();
+
+    this._initialise(beneficiary, vestingAmount, vestingTokenAddress, vestingDeadline);
+
+    const bw = new BytesWriter(1);
+    bw.writeBoolean(true);
+    return bw;
+  }
+
   /**
    * Initialises the vesting.
    */
-  private initialise(
+  private _initialise(
     beneficiary: Address,
     vestingAmount: u256,
     vestingTokenAddress: Address,
@@ -96,7 +127,7 @@ export class Vesting extends OP_NET {
     this.onlyUninitialised();
     this.onlyDeployer(caller);
 
-    if (deadlineBlockNumber <= Blockchain.block.number) {
+    if (deadlineBlockNumber <= u256.from(Blockchain.block.number)) {
       throw new Revert('Vesting date must be in the future.');
     }
 
@@ -105,7 +136,7 @@ export class Vesting extends OP_NET {
     this.vestedTokenAddress.value = vestingTokenAddress;
     this.vestedAmount.set(vestingAmount);
     this.deadlineBlock.set(deadlineBlockNumber);
-    this.vestingStartBlock.set(Blockchain.block.number);
+    this.vestingStartBlock.set(u256.from(Blockchain.block.number));
 
     // Transfer vesting tokens from the deployer to the contract
     OP20Utils.transferFrom(vestingTokenAddress, caller, this.address, vestingAmount);
@@ -148,10 +179,15 @@ export class Vesting extends OP_NET {
     return SafeMath.min(claimableAmount, contractBalance);
   }
 
+  @method('claim')
+  @returns({
+    name: 'claimedAmount',
+    type: ABIDataTypes.UINT256,
+  })
   /**
    * Allows the beneficiary to claim whatever amonut of tokens they are entitled to.
    */
-  private claim(): u256 {
+  public claim(_calldata: Calldata): BytesWriter {
     this.onlyInitialised();
     this.onlyBeneficiary();
     const contractBalance = OP20Utils.balanceOf(this.vestedTokenAddress.value, this.address);
@@ -160,30 +196,58 @@ export class Vesting extends OP_NET {
       throw new Revert('No tokens left to claim.');
     }
 
-    if (Blockchain.block.number <= this.vestingStartBlock.value) {
+    if (u256.from(Blockchain.block.number) <= this.vestingStartBlock.value) {
       throw new Revert('Please wait at least 1 block to claim rewards.');
     }
 
-    const claimAmount = this.calculateClaimableAmount(Blockchain.block.number, contractBalance);
+    const claimAmount = this.calculateClaimableAmount(
+      u256.from(Blockchain.block.number),
+      contractBalance,
+    );
 
     // Transfer vested tokens to beneficiary
     OP20Utils.transfer(this.vestedTokenAddress.value, this.beneficiary.value, claimAmount);
 
-    return claimAmount;
+    const bw = new BytesWriter(U256_BYTE_LENGTH);
+    bw.writeU256(claimAmount);
+    return bw;
   }
 
+  @method('unlockedAmount')
+  @returns({
+    name: 'unlockedAmount',
+    type: ABIDataTypes.UINT256,
+  })
+  public unlockedAmount(_calldata: Calldata): BytesWriter {
+    const unlockedAmount = this.calculateClaimableAmount(
+      u256.from(Blockchain.block.number),
+      OP20Utils.balanceOf(this.vestedTokenAddress.value, this.address),
+    );
+    const bw = new BytesWriter(32);
+    bw.writeU256(unlockedAmount);
+    return bw;
+  }
+
+  @method('cancel')
+  @returns({
+    name: 'success',
+    type: ABIDataTypes.BOOL,
+  })
   /**
    * Allows the deployer to cancel the vesting and reclaim their funds if the
    * vesting amount has never been touched by the beneficiary and the `reclaimWindow`
    * has passed.
    */
-  private cancelVesting(): void {
+  public cancel(_calldata: Calldata): BytesWriter {
     const caller = Blockchain.tx.sender;
 
     this.onlyInitialised();
     this.onlyDeployer(caller);
 
-    if (Blockchain.block.number < SafeMath.add(this.deadlineBlock.value, this.reclaimWindow)) {
+    if (
+      u256.from(Blockchain.block.number) <
+      SafeMath.add(this.deadlineBlock.value, this.reclaimWindow)
+    ) {
       throw new Revert('Reclaim window not open yet.');
     }
 
@@ -196,66 +260,47 @@ export class Vesting extends OP_NET {
     }
 
     OP20Utils.transfer(this.vestedTokenAddress.value, caller, contractBalance);
+
+    const bw = new BytesWriter(1);
+    bw.writeBoolean(true);
+    return bw;
   }
 
-  /**
-   * The entry point for calls to your contract from the outside.
-   */
-  public execute(method: Selector, calldata: Calldata): BytesWriter {
-    switch (method) {
-      // Contract calls that requuire parameters must encode their selector a bit differently
-      // FIXME: Ideally this should be done by a helper function and the type names should come from an opnet package, but this isn't currently possible
-      case encodeSelector('initialise(address,address,uint256,uint256)'): {
-        const beneficiary = calldata.readAddress();
-        const vestingTokenAddress = calldata.readAddress();
-        const vestingAmount = calldata.readU256();
-        const vestingDeadline = calldata.readU256();
-
-        this.initialise(beneficiary, vestingAmount, vestingTokenAddress, vestingDeadline);
-
-        // Contracts must always return a BytesWriter containing *something*
-        // It's customary to return `true` when no return value is necessary.
-        const bw = new BytesWriter(1);
-        bw.writeBoolean(true);
-        return bw;
-      }
-      case encodeSelector('claim'): {
-        const claimedAmount = this.claim();
-        // Contracts must always return a BytesWriter containing *something*
-        // It's customary to return `true` when no return value is necessary.
-        const bw = new BytesWriter(32);
-        bw.writeU256(claimedAmount);
-        return bw;
-      }
-      case encodeSelector('unlockedAmount'): {
-        const unlockedAmount = this.calculateClaimableAmount(
-          Blockchain.block.number,
-          OP20Utils.balanceOf(this.vestedTokenAddress.value, this.address),
-        );
-        const bw = new BytesWriter(32);
-        bw.writeU256(unlockedAmount);
-        return bw;
-      }
-      case encodeSelector('cancel'): {
-        this.cancelVesting();
-        // Contracts must always return a BytesWriter containing *something*
-        // It's customary to return `true` when no return value is necessary.
-        const bw = new BytesWriter(1);
-        bw.writeBoolean(true);
-        return bw;
-      }
-      case encodeSelector('vestingInfo'): {
-        const bw = new BytesWriter(2 * ADDRESS_BYTE_LENGTH + 4 * 32);
-        bw.writeAddress(this.beneficiary.value);
-        bw.writeAddress(this.vestedTokenAddress.value);
-        bw.writeU256(this.vestedAmount.value);
-        bw.writeU256(OP20Utils.balanceOf(this.vestedTokenAddress.value, this.address));
-        bw.writeU256(this.vestingStartBlock.value);
-        bw.writeU256(this.deadlineBlock.value);
-        return bw;
-      }
-      default:
-        return super.execute(method, calldata);
-    }
+  @method('vestingInfo')
+  @returns(
+    {
+      name: 'beneficiary',
+      type: ABIDataTypes.ADDRESS,
+    },
+    {
+      name: 'vestedTokenAddress',
+      type: ABIDataTypes.ADDRESS,
+    },
+    {
+      name: 'vestedAmount',
+      type: ABIDataTypes.UINT256,
+    },
+    {
+      name: 'remainingAmount',
+      type: ABIDataTypes.UINT256,
+    },
+    {
+      name: 'vestingStartBlock',
+      type: ABIDataTypes.UINT256,
+    },
+    {
+      name: 'deadlineBlock',
+      type: ABIDataTypes.UINT256,
+    },
+  )
+  public vestingInfo(_calldata: Calldata): BytesWriter {
+    const bw = new BytesWriter(2 * ADDRESS_BYTE_LENGTH + 4 * 32);
+    bw.writeAddress(this.beneficiary.value);
+    bw.writeAddress(this.vestedTokenAddress.value);
+    bw.writeU256(this.vestedAmount.value);
+    bw.writeU256(OP20Utils.balanceOf(this.vestedTokenAddress.value, this.address));
+    bw.writeU256(this.vestingStartBlock.value);
+    bw.writeU256(this.deadlineBlock.value);
+    return bw;
   }
 }

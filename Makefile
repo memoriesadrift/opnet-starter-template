@@ -1,3 +1,4 @@
+.PHONY: all, test , test-only, interact, format, help, clean, compile , check_node_modules
 CONTRACTS_DIR = src
 BUILD_DIR = build
 TEST_SRC_DIR = __test__/unit/tests
@@ -13,12 +14,12 @@ TEST_FILES = $(shell find $(TEST_SRC_DIR) -type f -name '*.ts')
 ASC = npx asc
 
 ASC_OPTS = \
-	--config asconfig.json
+	--config asconfig.json \
+	--measure\
+	--uncheckedBehavior never\
 
-.PHONY: all
 all: compile
 
-.PHONY: check_node_modules
 check_node_modules: package.json
 	@if [ ! -d node_modules ]; then \
 		echo "node_modules not found. Installing dependencies..."; \
@@ -33,7 +34,6 @@ check_node_modules: package.json
 	fi
 	touch node_modules
 
-.PHONY: compile 
 compile: check_node_modules $(OUTPUT_WASM_FILES)
 
 $(OUTPUT_WASM_FILES): $(SOURCE_FILES)
@@ -42,43 +42,43 @@ $(OUTPUT_WASM_FILES): $(SOURCE_FILES)
 	for prereq in $$prereqs; do \
 		if echo "$(CONTRACT_FILES)" | grep -q "$$prereq"; then \
 			target="$(BUILD_DIR)/$$(basename $$(dirname $$prereq)).wasm"; \
+			abort="$${prereq%.*}/abort"; \
 			echo "Compiling $$prereq to $$target"; \
 			$(ASC) $$prereq \
 				-o $$target \
+				-u abort=$$abort \
 				--textFile $(BUILD_DIR)/$$(basename $$target).wat \
 				$(ASC_OPTS); \
 		fi; \
 	done
 
-.PHONY: test
 test: $(OUTPUT_WASM_FILES)
 	@echo "Running all tests in $(TEST_SRC_DIR)"
 	@for test_file in $(TEST_FILES); do \
 		npx tsx "$$test_file"; \
 	done
 
-.PHONY: test-only
 test-only: $(OUPUT_WASM_FILES)
 	npx tsx $(TEST_SRC_DIR)/$(name).ts
 
-.PHONY: interact
 interact: check_node_modules
 	npx tsx $(INTEGRATION_TEST_SRC_DIR)/index.ts
 
+format: check_node_modules
+	npx npx prettier --config .prettierrc.json -w .
 
-.PHONY: help
 help:
 	@echo "=== OP_NET Makefile Command Overview ==="
 	@echo "make                             runs make compile" 
 	@echo "make compile                     compiles contracts, installs dependencies" 
 	@echo "make clean                       deletes build artifacts and node_modules" 
+	@echo "make format                      formats all source files using prettier" 
 	@echo "make test                        runs unit tests, compiling contracts if necessary" 
 	@echo "make test-only name=<file name>  runs only the given test file." 
 	@echo "make interact                    runs the integration test file to interact with contracts on regtest."
 	@echo "make help                        prints this message" 
 	@echo "make check_node_modules          run implicitly by other commands" 
 
-.PHONY: clean
 clean:
 	rm -f $(BUILD_DIR)/*.wasm
 	rm -f $(BUILD_DIR)/*.wat

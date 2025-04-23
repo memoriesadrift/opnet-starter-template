@@ -6,6 +6,4 @@ export function encodeNumericSelector(selector: string): number {
 }
 
 export const encodeSelectorWithParams = (name: string, ...params: ABIDataTypes[]) =>
-  encodeNumericSelector(
-    `${name}(${params.map((t) => AbiTypeToStr[t]).join(',')})`
-  )
+  encodeNumericSelector(`${name}(${params.map((t) => AbiTypeToStr[t]).join(',')})`);
