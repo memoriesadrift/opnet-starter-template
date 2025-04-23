@@ -1,13 +1,12 @@
 import { Assert, Blockchain, OP_20, opnet, OPNetUnit } from '@btc-vision/unit-test-framework';
 import { Vesting } from '../contracts/Vesting';
 import { Address } from '@btc-vision/transaction';
-import { rnd } from '../contracts/configs';
 
 const TEST_RUN_COUNT = 100;
 const BLOCKS_PER_DAY = 144;
 const CURRENT_HIGHEST_BLOCK_NUMBER = 874246;
 
-const deployer: Address = rnd();
+const deployer: Address = Blockchain.generateRandomAddress();
 
 await opnet('Fuzz Testing', async (vm: OPNetUnit) => {
   Blockchain.msgSender = deployer;
@@ -15,8 +14,8 @@ await opnet('Fuzz Testing', async (vm: OPNetUnit) => {
 
   let token: OP_20;
   let vesting: Vesting;
-  const tokenAddress: Address = rnd();
-  const vestingAddress: Address = rnd();
+  const tokenAddress: Address = Blockchain.generateRandomAddress();
+  const vestingAddress: Address = Blockchain.generateRandomAddress();
 
   vm.beforeEach(async () => {
     // Reset blockchain state
@@ -62,7 +61,7 @@ await opnet('Fuzz Testing', async (vm: OPNetUnit) => {
     await vm.it(
       `Unlocks correct amount of tokens per block, random values, fuzz test run ${n + 1}`,
       async () => {
-        const beneficiary = rnd();
+        const beneficiary = Blockchain.generateRandomAddress();
         const vestingAmount = Blockchain.expandTo18Decimals(
           Math.floor(Math.random() * 100_000) + 1,
         );
@@ -100,7 +99,7 @@ await opnet('Fuzz Testing', async (vm: OPNetUnit) => {
     await vm.it(
       `Claims correct amount of tokens per block, random values, fuzz test run ${n + 1}`,
       async () => {
-        const beneficiary = rnd();
+        const beneficiary = Blockchain.generateRandomAddress();
         const vestingAmount = Blockchain.expandTo18Decimals(
           Math.floor(Math.random() * 100_000) + 1,
         );

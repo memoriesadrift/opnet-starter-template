@@ -24,22 +24,22 @@
     "@assemblyscript/loader": "^0.27.35",
     "@btc-vision/as-bignum": "0.0.5",
     "@btc-vision/bitcoin": "6.3.6",
-    "@btc-vision/btc-runtime": "1.5.7",
+    "@btc-vision/btc-runtime": "1.5.8",
     "@btc-vision/opnet-transform": "^0.0.5",
-    "@btc-vision/transaction": "1.3.6",
-    "@btc-vision/unit-test-framework": "0.0.26",
+    "@btc-vision/transaction": "1.3.8",
+    "@btc-vision/unit-test-framework": "0.0.30",
     "@eslint/js": "^9.10.0",
     "dotenv": "^16.4.7",
     "gulplog": "^2.2.0",
-    "opnet": "1.3.19",
+    "opnet": "1.3.20",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.2",
+    "typescript": "^5.8.2",
     "typescript-eslint": "^8.6.0"
   },
   "devDependencies": {
     "@types/node": "^22.9.1",
     "assemblyscript": "^0.27.25",
-    "prettier": "^3.2.5",
+    "prettier": "^3.5.3",
     "tsx": "^4.19.3"
   }
 }

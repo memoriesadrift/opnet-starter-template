@@ -29,8 +29,6 @@ export class Vesting extends ContractRuntime {
 
   constructor(details: ContractDetails) {
     super(details);
-
-    this.preserveState();
   }
 
   /**
@@ -43,7 +41,11 @@ export class Vesting extends ContractRuntime {
     sender?: Address,
     origin?: Address,
   ): Promise<BinaryReader> {
-    const result = await this.execute(Buffer.from(buf), sender, origin);
+    const result = await this.execute({
+      calldata: Buffer.from(buf),
+      sender,
+      txOrigin: origin,
+    });
 
     if (result.error) {
       throw result.error;
