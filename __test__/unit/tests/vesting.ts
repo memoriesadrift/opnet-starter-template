@@ -50,11 +50,8 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     // Clear blockchain state between tests
     vesting.dispose();
     token.dispose();
-    Blockchain.cleanup();
     Blockchain.dispose();
   });
-
-  vm.afterAll(() => Blockchain.dispose());
 
   await vm.it('Initialises vesting contract successfully', async () => {
     const beneficiary = Blockchain.generateRandomAddress();

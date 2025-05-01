@@ -1,6 +1,6 @@
 import { ABIDataTypes, Address, BinaryReader, BinaryWriter } from '@btc-vision/transaction';
 import { BytecodeManager, ContractDetails, ContractRuntime } from '@btc-vision/unit-test-framework';
-import { encodeNumericSelector, encodeSelectorWithParams } from './utils.js';
+import { encodeNumericSelector, encodeSelectorWithParams, OptionalExecuteParams } from './utils.js';
 
 export type VestingInfo = {
   beneficiary: Address;
@@ -37,23 +37,17 @@ export class Vesting extends ContractRuntime {
    * Wrap the response in a BinaryReader and read whatever data you need.
    */
   private async getResponse(
-    buf: Uint8Array,
-    sender?: Address,
-    origin?: Address,
+    calldata: Uint8Array,
+    params?: OptionalExecuteParams,
   ): Promise<BinaryReader> {
     const result = await this.execute({
-      calldata: Buffer.from(buf),
-      sender,
-      txOrigin: origin,
+      calldata,
+      ...params,
     });
 
     if (result.error) {
       throw result.error;
     }
-
-    // FIXME: ???
-    // Maybe this is necessary ???
-    //this.dispose();
 
     return new BinaryReader(result.response);
   }
@@ -95,7 +89,7 @@ export class Vesting extends ContractRuntime {
     const calldata = new BinaryWriter();
     calldata.writeSelector(this.unlockedAmountSelector);
 
-    const reader = await this.getResponse(calldata.getBuffer());
+    const reader = await this.getResponse(calldata.getBuffer(), { saveStates: false });
 
     const unlockedAmount = reader.readU256();
 
@@ -110,7 +104,7 @@ export class Vesting extends ContractRuntime {
 
     const success = reader.readBoolean();
     if (!success) {
-      throw new Error('Vesting initialisation failed.');
+      throw new Error('Vesting cancellation failed.');
     }
   }
 
@@ -118,7 +112,7 @@ export class Vesting extends ContractRuntime {
     const calldata = new BinaryWriter();
     calldata.writeSelector(this.vestingInfoSelector);
 
-    const reader = await this.getResponse(calldata.getBuffer());
+    const reader = await this.getResponse(calldata.getBuffer(), { saveStates: false });
 
     const vestingInfo: VestingInfo = {
       beneficiary: reader.readAddress(),
