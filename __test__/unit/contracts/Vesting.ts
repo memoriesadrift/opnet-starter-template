@@ -22,10 +22,10 @@ export class Vesting extends ContractRuntime {
     ABIDataTypes.UINT256,
     ABIDataTypes.UINT256,
   );
-  protected readonly claimSelector = encodeNumericSelector('claim');
-  protected readonly unlockedAmountSelector = encodeNumericSelector('unlockedAmount');
-  protected readonly cancelSelector = encodeNumericSelector('cancel');
-  protected readonly vestingInfoSelector = encodeNumericSelector('vestingInfo');
+  protected readonly claimSelector = encodeNumericSelector('claim()');
+  protected readonly unlockedAmountSelector = encodeNumericSelector('unlockedAmount()');
+  protected readonly cancelSelector = encodeNumericSelector('cancel()');
+  protected readonly vestingInfoSelector = encodeNumericSelector('vestingInfo()');
 
   constructor(details: ContractDetails) {
     super(details);
