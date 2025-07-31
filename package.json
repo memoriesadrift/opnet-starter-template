@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {},
   "engines": {
-    "node": ">=23"
+    "node": "=22"
   },
   "type": "module",
   "license": "MIT",
@@ -21,25 +21,24 @@
     "wbtc"
   ],
   "dependencies": {
-    "@assemblyscript/loader": "^0.27.35",
+    "@assemblyscript/loader": "^0.28.3",
     "@btc-vision/as-bignum": "^0.0.5",
     "@btc-vision/bitcoin": "^6.4.6",
-    "@btc-vision/btc-runtime": "^1.7.4",
-    "@btc-vision/opnet-transform": "^0.1.5",
-    "@btc-vision/transaction": "^1.5.3",
-    "@btc-vision/unit-test-framework": "^0.1.4",
+    "@btc-vision/btc-runtime": "^1.8.1",
+    "@btc-vision/opnet-transform": "^0.1.8",
+    "@btc-vision/transaction": "^1.5.4",
+    "@btc-vision/unit-test-framework": "^0.3.0",
     "@eslint/js": "^9.10.0",
     "dotenv": "^16.4.7",
-    "gulplog": "^2.2.0",
-    "opnet": "1.5.8",
+    "opnet": "^1.5.16",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.6.0"
   },
   "devDependencies": {
-    "@types/node": "^22.9.1",
-    "assemblyscript": "^0.27.25",
-    "prettier": "^3.5.3",
-    "tsx": "^4.19.3"
+    "@types/node": "^24.0.14",
+    "assemblyscript": "^0.28.3",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.3"
   }
 }
