@@ -64,6 +64,16 @@ export type VestingInfo = CallResult<
     OPNetEvent<never>[]
 >;
 
+/**
+ * @description Represents the result of the onOP20Received function call.
+ */
+export type OnOP20Received = CallResult<
+    {
+        retval: number;
+    },
+    OPNetEvent<never>[]
+>;
+
 // ------------------------------------------------------------------
 // IVesting
 // ------------------------------------------------------------------
@@ -78,4 +88,10 @@ export interface IVesting extends IOP_NETContract {
     unlockedAmount(): Promise<UnlockedAmount>;
     cancel(): Promise<Cancel>;
     vestingInfo(): Promise<VestingInfo>;
+    onOP20Received(
+        from: Address,
+        to: Address,
+        amount: bigint,
+        data: Uint8Array,
+    ): Promise<OnOP20Received>;
 }

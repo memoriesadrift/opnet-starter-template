@@ -1,0 +1,361 @@
+{
+    "functions": [
+        {
+            "name": "name",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "name",
+                    "type": "STRING"
+                }
+            ]
+        },
+        {
+            "name": "symbol",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "symbol",
+                    "type": "STRING"
+                }
+            ]
+        },
+        {
+            "name": "icon",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "icon",
+                    "type": "STRING"
+                }
+            ]
+        },
+        {
+            "name": "decimals",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "decimals",
+                    "type": "UINT8"
+                }
+            ]
+        },
+        {
+            "name": "totalSupply",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "totalSupply",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "maximumSupply",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "maximumSupply",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "domainSeparator",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "domainSeparator",
+                    "type": "BYTES32"
+                }
+            ]
+        },
+        {
+            "name": "balanceOf",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "owner",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "balance",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "nonceOf",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "owner",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "nonce",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "allowance",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "owner",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "spender",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "remaining",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "safeTransfer",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "to",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "data",
+                    "type": "BYTES"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "safeTransferFrom",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "from",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "to",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "data",
+                    "type": "BYTES"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "increaseAllowance",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "spender",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "decreaseAllowance",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "spender",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "increaseAllowanceBySignature",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "owner",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "spender",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "deadline",
+                    "type": "UINT64"
+                },
+                {
+                    "name": "signature",
+                    "type": "BYTES"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "decreaseAllowanceBySignature",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "owner",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "spender",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "deadline",
+                    "type": "UINT64"
+                },
+                {
+                    "name": "signature",
+                    "type": "BYTES"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "burn",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "metadata",
+            "type": "Function",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "name",
+                    "type": "STRING"
+                },
+                {
+                    "name": "symbol",
+                    "type": "STRING"
+                },
+                {
+                    "name": "decimals",
+                    "type": "UINT8"
+                },
+                {
+                    "name": "totalSupply",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "maximumSupply",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "icon",
+                    "type": "STRING"
+                },
+                {
+                    "name": "domainSeparator",
+                    "type": "BYTES32"
+                }
+            ]
+        }
+    ],
+    "events": [
+        {
+            "name": "Transferred",
+            "values": [
+                {
+                    "name": "operator",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "from",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "to",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "Approved",
+            "values": [
+                {
+                    "name": "owner",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "spender",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "value",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "Burned",
+            "values": [
+                {
+                    "name": "from",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        }
+    ]
+}

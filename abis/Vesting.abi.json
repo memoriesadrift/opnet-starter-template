@@ -91,6 +91,34 @@
                     "type": "UINT256"
                 }
             ]
+        },
+        {
+            "name": "onOP20Received",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "from",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "to",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "data",
+                    "type": "BYTES"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "retval",
+                    "type": "UINT32"
+                }
+            ]
         }
     ],
     "events": []

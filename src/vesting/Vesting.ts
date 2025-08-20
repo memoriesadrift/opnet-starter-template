@@ -9,6 +9,8 @@ import {
   SafeMath,
   StoredAddress,
   StoredU256,
+  TransferHelper,
+  U32_BYTE_LENGTH,
   U256_BYTE_LENGTH,
 } from '@btc-vision/btc-runtime/runtime';
 import { getNextStoredAddress, getNextStoredU256 } from '../utils';
@@ -139,7 +141,7 @@ export class Vesting extends OP_NET {
     this.vestingStartBlock.set(u256.from(Blockchain.block.number));
 
     // Transfer vesting tokens from the deployer to the contract
-    OP20Utils.transferFrom(vestingTokenAddress, caller, this.address, vestingAmount);
+    TransferHelper.safeTransferFrom(vestingTokenAddress, caller, this.address, vestingAmount);
   }
 
   private calculateClaimableAmount(currentBlockNumber: u256, contractBalance: u256): u256 {
@@ -206,7 +208,7 @@ export class Vesting extends OP_NET {
     );
 
     // Transfer vested tokens to beneficiary
-    OP20Utils.transfer(this.vestedTokenAddress.value, this.beneficiary.value, claimAmount);
+    TransferHelper.safeTransfer(this.vestedTokenAddress.value, this.beneficiary.value, claimAmount);
 
     const bw = new BytesWriter(U256_BYTE_LENGTH);
     bw.writeU256(claimAmount);
@@ -259,7 +261,7 @@ export class Vesting extends OP_NET {
       );
     }
 
-    OP20Utils.transfer(this.vestedTokenAddress.value, caller, contractBalance);
+    TransferHelper.safeTransfer(this.vestedTokenAddress.value, caller, contractBalance);
 
     const bw = new BytesWriter(1);
     bw.writeBoolean(true);
@@ -301,6 +303,31 @@ export class Vesting extends OP_NET {
     bw.writeU256(OP20Utils.balanceOf(this.vestedTokenAddress.value, this.address));
     bw.writeU256(this.vestingStartBlock.value);
     bw.writeU256(this.deadlineBlock.value);
+    return bw;
+  }
+
+  @method(
+    {
+      name: 'from',
+      type: ABIDataTypes.ADDRESS,
+    },
+    {
+      name: 'to',
+      type: ABIDataTypes.ADDRESS,
+    },
+    {
+      name: 'amount',
+      type: ABIDataTypes.UINT256,
+    },
+    {
+      name: 'data',
+      type: ABIDataTypes.BYTES,
+    },
+  )
+  @returns({ name: 'retval', type: ABIDataTypes.UINT32 })
+  public onOP20Received(_calldata: Calldata): BytesWriter {
+    const bw = new BytesWriter(U32_BYTE_LENGTH);
+    bw.writeU32(OP20Utils.ON_OP20_RECEIVED_SELECTOR);
     return bw;
   }
 }

@@ -1,4 +1,4 @@
-import { Assert, Blockchain, OP_20, opnet, OPNetUnit } from '@btc-vision/unit-test-framework';
+import { Assert, Blockchain, OP20, opnet, OPNetUnit } from '@btc-vision/unit-test-framework';
 import { Vesting } from '../contracts/Vesting';
 import { Address } from '@btc-vision/transaction';
 
@@ -8,7 +8,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
   Blockchain.msgSender = deployer;
   Blockchain.txOrigin = deployer; // "leftmost thing in the call chain"
 
-  let token: OP_20;
+  let token: OP20;
   let vesting: Vesting;
   const tokenAddress: Address = Blockchain.generateRandomAddress();
   const vestingAddress: Address = Blockchain.generateRandomAddress();
@@ -21,7 +21,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     await Blockchain.init();
 
     // Instantiate and register the OP_20 token
-    token = new OP_20({
+    token = new OP20({
       file: './lib/bytecode/OP20.wasm',
       address: tokenAddress,
       decimals: 18,
@@ -59,7 +59,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     const deadlineBlock = 100n;
     Blockchain.blockNumber = 1n;
 
-    await token.approve(deployer, vestingAddress, vestingAmount);
+    await token.increaseAllowance(deployer, vestingAddress, vestingAmount);
     await vesting.initialise(beneficiary, tokenAddress, vestingAmount, deadlineBlock);
 
     const vestingInfo = await vesting.vestingInfo();
@@ -77,7 +77,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     const deadlineBlock = 100n;
     Blockchain.blockNumber = 1n;
 
-    await token.approve(deployer, vestingAddress, vestingAmount);
+    await token.increaseAllowance(deployer, vestingAddress, vestingAmount);
     await vesting.initialise(beneficiary, tokenAddress, vestingAmount, deadlineBlock);
     Blockchain.blockNumber = 100n;
     Blockchain.msgSender = Blockchain.generateRandomAddress();
@@ -92,7 +92,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     const deadlineBlock = 100n;
     Blockchain.blockNumber = 1n;
 
-    await token.approve(deployer, vestingAddress, vestingAmount);
+    await token.increaseAllowance(deployer, vestingAddress, vestingAmount);
     await vesting.initialise(beneficiary, tokenAddress, vestingAmount, deadlineBlock);
     Blockchain.blockNumber = 10n;
     Blockchain.msgSender = beneficiary;
@@ -111,7 +111,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     const preBalance = await token.balanceOf(deployer);
     Blockchain.blockNumber = 1n;
 
-    await token.approve(deployer, vestingAddress, vestingAmount);
+    await token.increaseAllowance(deployer, vestingAddress, vestingAmount);
     await vesting.initialise(beneficiary, tokenAddress, vestingAmount, deadlineBlock);
 
     Blockchain.blockNumber = 1000n;
@@ -126,7 +126,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     const deadlineBlock = 100n;
     Blockchain.blockNumber = 1n;
 
-    await token.approve(deployer, vestingAddress, vestingAmount);
+    await token.increaseAllowance(deployer, vestingAddress, vestingAmount);
     await vesting.initialise(beneficiary, tokenAddress, vestingAmount, deadlineBlock);
 
     Blockchain.msgSender = beneficiary;
@@ -144,7 +144,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     const rewardsPerBlock = vestingAmount / (deadlineBlock - startBlock);
     Blockchain.blockNumber = startBlock;
 
-    await token.approve(deployer, vestingAddress, vestingAmount);
+    await token.increaseAllowance(deployer, vestingAddress, vestingAmount);
     await vesting.initialise(beneficiary, tokenAddress, vestingAmount, deadlineBlock);
 
     Blockchain.msgSender = beneficiary;
@@ -168,7 +168,7 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
       const rewardsPerBlock = vestingAmount / (deadlineBlock - startBlock);
       Blockchain.blockNumber = startBlock;
 
-      await token.approve(deployer, vestingAddress, vestingAmount);
+      await token.increaseAllowance(deployer, vestingAddress, vestingAmount);
       await vesting.initialise(beneficiary, tokenAddress, vestingAmount, deadlineBlock);
 
       Blockchain.msgSender = beneficiary;

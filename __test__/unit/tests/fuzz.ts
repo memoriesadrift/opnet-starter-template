@@ -1,4 +1,4 @@
-import { Assert, Blockchain, OP_20, opnet, OPNetUnit } from '@btc-vision/unit-test-framework';
+import { Assert, Blockchain, OP20, opnet, OPNetUnit } from '@btc-vision/unit-test-framework';
 import { Vesting } from '../contracts/Vesting';
 import { Address } from '@btc-vision/transaction';
 
@@ -12,7 +12,7 @@ await opnet('Fuzz Testing', async (vm: OPNetUnit) => {
   Blockchain.msgSender = deployer;
   Blockchain.txOrigin = deployer; // "leftmost thing in the call chain"
 
-  let token: OP_20;
+  let token: OP20;
   let vesting: Vesting;
   const tokenAddress: Address = Blockchain.generateRandomAddress();
   const vestingAddress: Address = Blockchain.generateRandomAddress();
@@ -25,7 +25,7 @@ await opnet('Fuzz Testing', async (vm: OPNetUnit) => {
     await Blockchain.init();
 
     // Instantiate and register the OP_20 token
-    token = new OP_20({
+    token = new OP20({
       file: './lib/bytecode/OP20.wasm',
       address: tokenAddress,
       decimals: 18,
@@ -71,7 +71,7 @@ await opnet('Fuzz Testing', async (vm: OPNetUnit) => {
         const rewardsPerBlock = vestingAmount / (deadlineBlock - startBlock);
         Blockchain.blockNumber = startBlock;
 
-        await token.approve(deployer, vestingAddress, vestingAmount);
+        await token.increaseAllowance(deployer, vestingAddress, vestingAmount);
         await vesting.initialise(beneficiary, tokenAddress, vestingAmount, deadlineBlock);
 
         Blockchain.msgSender = beneficiary;
@@ -109,7 +109,7 @@ await opnet('Fuzz Testing', async (vm: OPNetUnit) => {
         const rewardsPerBlock = vestingAmount / (deadlineBlock - startBlock);
         Blockchain.blockNumber = startBlock;
 
-        await token.approve(deployer, vestingAddress, vestingAmount);
+        await token.increaseAllowance(deployer, vestingAddress, vestingAmount);
         await vesting.initialise(beneficiary, tokenAddress, vestingAmount, deadlineBlock);
 
         Blockchain.msgSender = beneficiary;
