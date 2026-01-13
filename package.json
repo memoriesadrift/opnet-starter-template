@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {},
   "engines": {
-    "node": "=22"
+    "node": "=24"
   },
   "type": "module",
   "license": "MIT",
@@ -21,21 +21,21 @@
     "wbtc"
   ],
   "dependencies": {
-    "@assemblyscript/loader": "^0.28.3",
-    "@btc-vision/as-bignum": "^0.0.5",
-    "@btc-vision/bitcoin": "6.4.8",
-    "@btc-vision/btc-runtime": "1.9.1",
-    "@btc-vision/opnet-transform": "0.1.10",
-    "@btc-vision/transaction": "1.6.6",
-    "@btc-vision/unit-test-framework": "0.3.2",
+    "@assemblyscript/loader": "^0.28.9",
+    "@btc-vision/as-bignum": "^0.0.7",
+    "@btc-vision/bitcoin": "6.5.4",
+    "@btc-vision/btc-runtime": "1.10.12",
+    "@btc-vision/opnet-transform": "0.2.1",
+    "@btc-vision/transaction": "1.7.31",
     "@eslint/js": "^9.10.0",
     "dotenv": "^16.4.7",
-    "opnet": "1.6.7",
+    "opnet": "1.7.35",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.6.0"
   },
   "devDependencies": {
+    "@btc-vision/unit-test-framework": "0.4.10",
     "@types/node": "^24.0.14",
     "assemblyscript": "^0.28.3",
     "prettier": "^3.6.2",

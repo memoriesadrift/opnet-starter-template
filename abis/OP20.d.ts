@@ -13,7 +13,7 @@ export type TransferredEvent = {
 export type ApprovedEvent = {
     readonly owner: Address;
     readonly spender: Address;
-    readonly value: bigint;
+    readonly amount: bigint;
 };
 export type BurnedEvent = {
     readonly from: Address;
@@ -125,6 +125,16 @@ export type Allowance = CallResult<
 >;
 
 /**
+ * @description Represents the result of the transfer function call.
+ */
+export type Transfer = CallResult<{}, OPNetEvent<TransferredEvent>[]>;
+
+/**
+ * @description Represents the result of the transferFrom function call.
+ */
+export type TransferFrom = CallResult<{}, OPNetEvent<TransferredEvent>[]>;
+
+/**
  * @description Represents the result of the safeTransfer function call.
  */
 export type SafeTransfer = CallResult<{}, OPNetEvent<TransferredEvent>[]>;
@@ -166,10 +176,9 @@ export type Metadata = CallResult<
     {
         name: string;
         symbol: string;
+        icon: string;
         decimals: number;
         totalSupply: bigint;
-        maximumSupply: bigint;
-        icon: string;
         domainSeparator: Uint8Array;
     },
     OPNetEvent<never>[]
@@ -189,6 +198,8 @@ export interface IOP20 extends IOP_NETContract {
     balanceOf(owner: Address): Promise<BalanceOf>;
     nonceOf(owner: Address): Promise<NonceOf>;
     allowance(owner: Address, spender: Address): Promise<Allowance>;
+    transfer(to: Address, amount: bigint): Promise<Transfer>;
+    transferFrom(from: Address, to: Address, amount: bigint): Promise<TransferFrom>;
     safeTransfer(to: Address, amount: bigint, data: Uint8Array): Promise<SafeTransfer>;
     safeTransferFrom(
         from: Address,
@@ -199,14 +210,16 @@ export interface IOP20 extends IOP_NETContract {
     increaseAllowance(spender: Address, amount: bigint): Promise<IncreaseAllowance>;
     decreaseAllowance(spender: Address, amount: bigint): Promise<DecreaseAllowance>;
     increaseAllowanceBySignature(
-        owner: Address,
+        owner: Uint8Array,
+        ownerTweakedPublicKey: Uint8Array,
         spender: Address,
         amount: bigint,
         deadline: bigint,
         signature: Uint8Array,
     ): Promise<IncreaseAllowanceBySignature>;
     decreaseAllowanceBySignature(
-        owner: Address,
+        owner: Uint8Array,
+        ownerTweakedPublicKey: Uint8Array,
         spender: Address,
         amount: bigint,
         deadline: bigint,

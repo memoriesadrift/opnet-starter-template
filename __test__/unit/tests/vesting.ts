@@ -81,9 +81,9 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     await vesting.initialise(beneficiary, tokenAddress, vestingAmount, deadlineBlock);
     Blockchain.blockNumber = 100n;
     Blockchain.msgSender = Blockchain.generateRandomAddress();
-    Assert.throwsAsync(async () => {
+    await Assert.expect(async () => {
       await vesting.claim();
-    });
+    }).toThrow();
   });
 
   await vm.it("Doesn't allow owner to cancel partially claimed vesting", async () => {
@@ -99,9 +99,9 @@ await opnet('Vesting', async (vm: OPNetUnit) => {
     await vesting.claim();
     Blockchain.blockNumber = 1000n;
     Blockchain.msgSender = deployer;
-    Assert.throwsAsync(async () => {
+    await Assert.expect(async () => {
       await vesting.cancel();
-    });
+    }).toThrow();
   });
 
   await vm.it('Allows owner to cancel unclaimed vesting', async () => {

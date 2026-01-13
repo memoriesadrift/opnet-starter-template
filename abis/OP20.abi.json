@@ -130,6 +130,40 @@
             ]
         },
         {
+            "name": "transfer",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "to",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "transferFrom",
+            "type": "Function",
+            "inputs": [
+                {
+                    "name": "from",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "to",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
             "name": "safeTransfer",
             "type": "Function",
             "inputs": [
@@ -207,7 +241,11 @@
             "inputs": [
                 {
                     "name": "owner",
-                    "type": "ADDRESS"
+                    "type": "BYTES32"
+                },
+                {
+                    "name": "ownerTweakedPublicKey",
+                    "type": "BYTES32"
                 },
                 {
                     "name": "spender",
@@ -234,7 +272,11 @@
             "inputs": [
                 {
                     "name": "owner",
-                    "type": "ADDRESS"
+                    "type": "BYTES32"
+                },
+                {
+                    "name": "ownerTweakedPublicKey",
+                    "type": "BYTES32"
                 },
                 {
                     "name": "spender",
@@ -280,20 +322,16 @@
                     "type": "STRING"
                 },
                 {
+                    "name": "icon",
+                    "type": "STRING"
+                },
+                {
                     "name": "decimals",
                     "type": "UINT8"
                 },
                 {
                     "name": "totalSupply",
                     "type": "UINT256"
-                },
-                {
-                    "name": "maximumSupply",
-                    "type": "UINT256"
-                },
-                {
-                    "name": "icon",
-                    "type": "STRING"
                 },
                 {
                     "name": "domainSeparator",
@@ -337,7 +375,7 @@
                     "type": "ADDRESS"
                 },
                 {
-                    "name": "value",
+                    "name": "amount",
                     "type": "UINT256"
                 }
             ],

@@ -12,6 +12,7 @@ import {
   TransferHelper,
   U32_BYTE_LENGTH,
   U256_BYTE_LENGTH,
+  DEAD_ADDRESS,
 } from '@btc-vision/btc-runtime/runtime';
 import { getNextStoredAddress, getNextStoredU256 } from '../utils';
 import { u256 } from '@btc-vision/as-bignum/assembly';
@@ -68,7 +69,7 @@ export class Vesting extends OP_NET {
    * Initialisation is defined as the beneficiary address being set.
    */
   private onlyInitialised(): void {
-    if (this.beneficiary.value == Address.dead()) {
+    if (this.beneficiary.value == DEAD_ADDRESS) {
       throw new Revert('Contract not initialised.');
     }
   }
@@ -78,8 +79,8 @@ export class Vesting extends OP_NET {
    * Initialisation is defined as the beneficiary address being set.
    */
   private onlyUninitialised(): void {
-    if (this.beneficiary.value == Address.dead()) {
-      throw new Revert('Contract not initialised.');
+    if (this.beneficiary.value != DEAD_ADDRESS) {
+      throw new Revert('Contract already initialised.');
     }
   }
 

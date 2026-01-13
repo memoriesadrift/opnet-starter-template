@@ -2,7 +2,7 @@ import * as bitcoin from '@btc-vision/bitcoin';
 import * as dotenv from 'dotenv';
 import {
   getContract,
-  IOP_20Contract,
+  IOP20Contract,
   JSONRpcProvider,
   OP_20_ABI,
   TransactionParameters,
@@ -39,7 +39,7 @@ const vestingContractAddress = await provider.getPublicKeyInfo(
 const tokenAddress = await provider.getPublicKeyInfo(process.env.TOKEN_CONTRACT_ADDRESS || '');
 
 async function interact() {
-  const tokenContract: IOP_20Contract = getContract<IOP_20Contract>(
+  const tokenContract = getContract<IOP20Contract>(
     tokenAddress,
     OP_20_ABI,
     provider,
