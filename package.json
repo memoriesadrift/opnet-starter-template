@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {},
   "engines": {
-    "node": "=24"
+    "node": "=25"
   },
   "type": "module",
   "license": "MIT",
@@ -23,7 +23,7 @@
   "dependencies": {
     "@assemblyscript/loader": "^0.28.9",
     "@btc-vision/as-bignum": "^0.0.7",
-    "@btc-vision/bitcoin": "6.5.4",
+    "@btc-vision/bitcoin": "6.5.6",
     "@btc-vision/btc-runtime": "1.10.12",
     "@btc-vision/opnet-transform": "0.2.1",
     "@btc-vision/transaction": "1.7.31",

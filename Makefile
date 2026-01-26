@@ -37,9 +37,13 @@ check_node_modules: package.json
 compile: check_node_modules $(OUTPUT_WASM_FILES)
 
 $(OUTPUT_WASM_FILES): $(SOURCE_FILES)
-	@prereqs="$^"; \
-	targets="$@"; \
-	for prereq in $$prereqs; do \
+	@if command -v nproc >/dev/null 2>&1; then \
+		NPROC=$$(nproc); \
+	else \
+		NPROC=$$(sysctl -n hw.ncpu); \
+	fi; \
+	compile_contract() { \
+		prereq="$$1"; \
 		if echo "$(CONTRACT_FILES)" | grep -q "$$prereq"; then \
 			target="$(BUILD_DIR)/$$(basename $$(dirname $$prereq)).wasm"; \
 			abort="$${prereq%.*}/abort"; \
@@ -50,7 +54,9 @@ $(OUTPUT_WASM_FILES): $(SOURCE_FILES)
 				--textFile $(BUILD_DIR)/$$(basename $$target).wat \
 				$(ASC_OPTS); \
 		fi; \
-	done
+	}; \
+	export -f compile_contract; \
+	echo "$^" | tr ' ' '\n' | xargs -P "$$NPROC" -I {} bash -c 'compile_contract "{}"'
 
 test: $(OUTPUT_WASM_FILES)
 	@echo "Running all tests in $(TEST_SRC_DIR)"
