@@ -42,8 +42,8 @@ $(OUTPUT_WASM_FILES): $(SOURCE_FILES)
 	else \
 		NPROC=$$(sysctl -n hw.ncpu); \
 	fi; \
-	compile_contract() { \
-		prereq="$$1"; \
+	echo "$^" | tr ' ' '\n' | xargs -P "$$NPROC" -I {} bash -c ' \
+		prereq="{}"; \
 		if echo "$(CONTRACT_FILES)" | grep -q "$$prereq"; then \
 			target="$(BUILD_DIR)/$$(basename $$(dirname $$prereq)).wasm"; \
 			abort="$${prereq%.*}/abort"; \
@@ -53,10 +53,8 @@ $(OUTPUT_WASM_FILES): $(SOURCE_FILES)
 				-u abort=$$abort \
 				--textFile $(BUILD_DIR)/$$(basename $$target).wat \
 				$(ASC_OPTS); \
-		fi; \
-	}; \
-	export -f compile_contract; \
-	echo "$^" | tr ' ' '\n' | xargs -P "$$NPROC" -I {} bash -c 'compile_contract "{}"'
+		fi \
+	'
 
 test: $(OUTPUT_WASM_FILES)
 	@echo "Running all tests in $(TEST_SRC_DIR)"
