@@ -1,4 +1,4 @@
-import { Address, AddressMap } from '@btc-vision/transaction';
+import { Address, AddressMap, ExtendedAddressMap, SchnorrSignature } from '@btc-vision/transaction';
 import { CallResult, OPNetEvent, IOP_NETContract } from 'opnet';
 
 // ------------------------------------------------------------------
@@ -88,10 +88,5 @@ export interface IVesting extends IOP_NETContract {
     unlockedAmount(): Promise<UnlockedAmount>;
     cancel(): Promise<Cancel>;
     vestingInfo(): Promise<VestingInfo>;
-    onOP20Received(
-        from: Address,
-        to: Address,
-        amount: bigint,
-        data: Uint8Array,
-    ): Promise<OnOP20Received>;
+    onOP20Received(from: Address, to: Address, amount: bigint, data: Uint8Array): Promise<OnOP20Received>;
 }

@@ -216,6 +216,7 @@ export class Vesting extends OP_NET {
     return bw;
   }
 
+  @view()
   @method('unlockedAmount')
   @returns({
     name: 'unlockedAmount',
@@ -269,6 +270,7 @@ export class Vesting extends OP_NET {
     return bw;
   }
 
+  @view()
   @method('vestingInfo')
   @returns(
     {

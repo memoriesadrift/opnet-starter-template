@@ -3,6 +3,8 @@
         {
             "name": "name",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {
@@ -14,6 +16,8 @@
         {
             "name": "symbol",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {
@@ -25,6 +29,8 @@
         {
             "name": "icon",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {
@@ -36,6 +42,8 @@
         {
             "name": "decimals",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {
@@ -47,6 +55,8 @@
         {
             "name": "totalSupply",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {
@@ -58,6 +68,8 @@
         {
             "name": "maximumSupply",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {
@@ -69,6 +81,8 @@
         {
             "name": "domainSeparator",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {
@@ -80,6 +94,8 @@
         {
             "name": "balanceOf",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "owner",
@@ -96,6 +112,8 @@
         {
             "name": "nonceOf",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "owner",
@@ -112,6 +130,8 @@
         {
             "name": "allowance",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "owner",
@@ -132,6 +152,8 @@
         {
             "name": "transfer",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "to",
@@ -147,6 +169,8 @@
         {
             "name": "transferFrom",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "from",
@@ -166,6 +190,8 @@
         {
             "name": "safeTransfer",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "to",
@@ -185,6 +211,8 @@
         {
             "name": "safeTransferFrom",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "from",
@@ -208,6 +236,8 @@
         {
             "name": "increaseAllowance",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "spender",
@@ -223,6 +253,8 @@
         {
             "name": "decreaseAllowance",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "spender",
@@ -238,6 +270,8 @@
         {
             "name": "increaseAllowanceBySignature",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "owner",
@@ -269,6 +303,8 @@
         {
             "name": "decreaseAllowanceBySignature",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "owner",
@@ -300,6 +336,8 @@
         {
             "name": "burn",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "amount",
@@ -311,6 +349,8 @@
         {
             "name": "metadata",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {

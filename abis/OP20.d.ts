@@ -1,4 +1,4 @@
-import { Address, AddressMap } from '@btc-vision/transaction';
+import { Address, AddressMap, ExtendedAddressMap, SchnorrSignature } from '@btc-vision/transaction';
 import { CallResult, OPNetEvent, IOP_NETContract } from 'opnet';
 
 // ------------------------------------------------------------------
@@ -201,12 +201,7 @@ export interface IOP20 extends IOP_NETContract {
     transfer(to: Address, amount: bigint): Promise<Transfer>;
     transferFrom(from: Address, to: Address, amount: bigint): Promise<TransferFrom>;
     safeTransfer(to: Address, amount: bigint, data: Uint8Array): Promise<SafeTransfer>;
-    safeTransferFrom(
-        from: Address,
-        to: Address,
-        amount: bigint,
-        data: Uint8Array,
-    ): Promise<SafeTransferFrom>;
+    safeTransferFrom(from: Address, to: Address, amount: bigint, data: Uint8Array): Promise<SafeTransferFrom>;
     increaseAllowance(spender: Address, amount: bigint): Promise<IncreaseAllowance>;
     decreaseAllowance(spender: Address, amount: bigint): Promise<DecreaseAllowance>;
     increaseAllowanceBySignature(

@@ -42,19 +42,25 @@ $(OUTPUT_WASM_FILES): $(SOURCE_FILES)
 	else \
 		NPROC=$$(sysctl -n hw.ncpu); \
 	fi; \
-	echo "$^" | tr ' ' '\n' | xargs -P "$$NPROC" -I {} bash -c ' \
-		prereq="{}"; \
-		if echo "$(CONTRACT_FILES)" | grep -q "$$prereq"; then \
-			target="$(BUILD_DIR)/$$(basename $$(dirname $$prereq)).wasm"; \
-			abort="$${prereq%.*}/abort"; \
-			echo "Compiling $$prereq to $$target"; \
-			$(ASC) $$prereq \
-				-o $$target \
-				-u abort=$$abort \
-				--textFile $(BUILD_DIR)/$$(basename $$target).wat \
-				$(ASC_OPTS); \
-		fi \
-	'
+	_tmpfile=$$(mktemp); \
+	printf '%s\n' $^ > "$$_tmpfile"; \
+	for prereq in $(CONTRACT_FILES); do \
+		( \
+			if grep -qx "$$prereq" "$$_tmpfile"; then \
+				target="$(BUILD_DIR)/$$(basename $$(dirname $$prereq)).wasm"; \
+				abort="$${prereq%.*}/abort"; \
+				echo "Compiling $$prereq to $$target"; \
+				$(ASC) $$prereq \
+					-o $$target \
+					-u abort=$$abort \
+					--textFile $(BUILD_DIR)/$$(basename $$target).wat \
+					$(ASC_OPTS); \
+			fi \
+		) & \
+		if [ $$(jobs -r | wc -l) -ge "$$NPROC" ]; then wait -n 2>/dev/null || wait; fi; \
+	done; \
+	wait; \
+	rm -f "$$_tmpfile"
 
 test: $(OUTPUT_WASM_FILES)
 	@echo "Running all tests in $(TEST_SRC_DIR)"

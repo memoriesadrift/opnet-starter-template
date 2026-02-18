@@ -3,6 +3,8 @@
         {
             "name": "initialise",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "beneficiary",
@@ -31,6 +33,8 @@
         {
             "name": "claim",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {
@@ -41,7 +45,9 @@
         },
         {
             "name": "unlockedAmount",
-            "type": "Function",
+            "type": "View",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {
@@ -53,6 +59,8 @@
         {
             "name": "cancel",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {
@@ -63,7 +71,9 @@
         },
         {
             "name": "vestingInfo",
-            "type": "Function",
+            "type": "View",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [],
             "outputs": [
                 {
@@ -95,6 +105,8 @@
         {
             "name": "onOP20Received",
             "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
             "inputs": [
                 {
                     "name": "from",
