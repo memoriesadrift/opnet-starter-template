@@ -2,43 +2,42 @@
     "type": "module",
     "name": "opnet-starter-template",
     "version": "0.0.2",
-  "description": "OP_NET Smart Contract Template with a simple vesting contract and unit tests",
-  "main": "index.js",
-  "scripts": {},
-  "engines": {
-    "node": "=25"
-  },
-  "type": "module",
-  "license": "MIT",
-  "keywords": [
-    "bitcoin",
-    "smart",
-    "contract",
-    "runtime",
-    "opnet",
-    "OP_NET",
-    "wrapped bitcoin",
-    "wbtc"
-  ],
-  "dependencies": {
-    "@assemblyscript/loader": "^0.28.9",
-    "@btc-vision/as-bignum": "^0.1.2",
-    "@btc-vision/assemblyscript": "0.29.2",
-    "@btc-vision/bitcoin": "7.0.0-rc.4",
-    "@btc-vision/btc-runtime": "1.11.0-rc.7",
-    "@btc-vision/opnet-transform": "1.2.0",
-    "@btc-vision/transaction": "1.8.0-rc.3",
-    "@eslint/js": "^9.39.2",
-    "dotenv": "^16.4.7",
-    "opnet": "1.8.1-rc.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.2",
-    "typescript-eslint": "^8.6.0"
-  },
-  "devDependencies": {
-    "@btc-vision/unit-test-framework": "1.0.0-beta.0",
-    "@types/node": "^24.0.14",
-    "prettier": "^3.6.2",
-    "tsx": "^4.20.3"
-  }
+    "description": "OP_NET Smart Contract Template with a simple vesting contract and unit tests",
+    "main": "index.js",
+    "scripts": {},
+    "engines": {
+        "node": "=25"
+    },
+    "license": "MIT",
+    "keywords": [
+        "bitcoin",
+        "smart",
+        "contract",
+        "runtime",
+        "opnet",
+        "OP_NET",
+        "wrapped bitcoin",
+        "wbtc"
+    ],
+    "dependencies": {
+        "@assemblyscript/loader": "^0.28.9",
+        "@btc-vision/as-bignum": "^0.1.2",
+        "@btc-vision/assemblyscript": "0.29.2",
+        "@btc-vision/bitcoin": "^7.0.0-rc.4",
+        "@btc-vision/btc-runtime": "1.11.0-rc.7",
+        "@btc-vision/opnet-transform": "1.2.0",
+        "@btc-vision/transaction": "^1.8.0-rc.4",
+        "@eslint/js": "^9.39.2",
+        "dotenv": "^16.4.7",
+        "opnet": "^1.8.1-rc.5",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.2",
+        "typescript-eslint": "^8.6.0"
+    },
+    "devDependencies": {
+        "@btc-vision/unit-test-framework": "1.0.0-beta.0",
+        "@types/node": "^24.0.14",
+        "prettier": "^3.6.2",
+        "tsx": "^4.20.3"
+    }
 }
